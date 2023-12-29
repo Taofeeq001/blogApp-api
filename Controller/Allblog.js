@@ -15,5 +15,3 @@ const allblog = async (req, res)=>{
     }
 }
 module.exports = allblog
-
-// modules.export = allblog;
