@@ -1,0 +1,104 @@
+const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        let user;
+
+        if (email) {
+            user = await User.findOne({ email });
+            
+        // } else if (username) {
+        //     user = await User.findOne({ username });
+        } else {
+            return res.status(400).json({ error: "Please provide either email or username for login" });
+        }
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const isvalidPassword = await bcrypt.compare(password, user.password);
+        if (!isvalidPassword) {
+            return res.status(401).json({ error: "Incorrect password" });
+        }
+
+        const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+            expiresIn: "1h"
+        });
+
+        return res.json({ message: 'User successfully logged in', token });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "An error occurred during the login process" });
+    }
+};
+
+// const login = async (req, res) => {
+//     const { email, password, username } = req.body
+
+//     try {
+//         let user;
+//         if (email) {
+//             user = await User.findOne({ email });
+//         } else if (username) {
+//             user = await User.findOne({ username });
+//         } else {
+//             throw new Error("Please provide either email or username for login");
+//         }
+
+//         if (!email) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+//         console.log(email)
+
+//         const isvalidPassword = bcrypt.compare(password, user.password);
+//         if (!isvalidPassword) {
+//             return res.status(401).json({ error: "Incorrect password" });
+//         }
+
+//         const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+//             expiresIn: "1h"
+//         });
+//         return res.json({ message: 'User successfully logged in', token });
+
+//     } catch (error) {
+//         console.log(error)
+//         return res.status(500).json({ error: "an Error occured during the process" })
+//     }
+
+// }
+// const login = async (req, res) => {
+//     const { email, password, username } = req.body;
+
+//     try {
+//         let user;
+
+//         if (email) {
+//             user = await User.findOne({ email });
+//         } else if (username) {
+//             user = await User.findOne({ username });
+//         } else {
+//             return res.status(400).json({ error: "Please provide either email or username for login" });
+//         }
+
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+
+//         const isvalidPassword = await bcrypt.compare(password, user.password);
+//         if (!isvalidPassword) {
+//             return res.status(401).json({ error: "Incorrect password" });
+//         }
+
+//         const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+//             expiresIn: "1h"
+//         });
+
+//         return res.json({ message: 'User successfully logged in', token });
+
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ error: "An error occurred during the login process" });
+//     }
+// }
