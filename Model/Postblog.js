@@ -11,6 +11,10 @@ const blogSchema = new mongoose.Schema({
     created_at: {
         type:Date,
         default: Date.now
+    },
+    blogImage: {
+        type: String,
+        require: true
     }
 })
 const blog = mongoose.model("Blog", blogSchema)

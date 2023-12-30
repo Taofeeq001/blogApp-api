@@ -1,21 +1,19 @@
-const blog = require("../Model/Postblog")
+const blog = require("../Model/Postblog");
 
-const updateblog = async (req, res)=>{
-    const {id, title, summary, content}= req.body
+const updateblog = async (req, res) => {
     try {
-        const update = await blog.findByIdAndUpdate({
-            title,
-            summary,
-            content
-        }, { new:true })
-        
-        if(!update || update.length===0){
-            return res.status(401).json({message:"No blog available"})
+       const {id} = req.params 
+       const updateBlog = req.body;
+       const updatedBlog = await blog.findByIdAndUpdate(id,req.body,
+        {new:true, runValidators:true})  //this is a key word that must be added to anything you wanted to update
+        if(!updatedBlog){
+            return res.json({error:'no blog with Id found'})
         }
-        return res.status(201).json({update}, {message:"blog updated successfully"})
+        return res.json({msg:"blog updated successfully", updatedBlog})
     } catch (error) {
-        console.log(error)   
-        return res.status(500).json({message:"an error occured"})
+        console.log(error)
+        return res.status(500).json({error:"server error"})
     }
 }
+
 module.exports = updateblog;

@@ -1,6 +1,8 @@
 const blog = require("../Model/Postblog");
 // const User = require("../Model/User");
 const auth = require("../Verificationtoken");
+//import the upload file function here
+const upload = require('../middleware/handleFile')
 
 const createBlog = async (req, res) => {
     try {
@@ -18,15 +20,26 @@ const createBlog = async (req, res) => {
 
             const { title, summary, content } = req.body;
 
+            //variable for blog image 
+            const blogImage = req.files.blogImage
+
             if (!title || !summary || !content) {
                 throw new Error("Fields omitted are required");
             }
-
+            if (!req.files || Object.keys(req.files).length===0){
+                return res.status(400).json({
+                    error:'no file uploaded'
+                })
+            }
+            // import the path of the image upload here
+            const uploadPath = __dirname + '/uploads/' + blogImage.name;
+            //you add image to be uploaded here
             const newBlog = new blog({
                 title,
                 summary,
                 content,
-                author: user._id
+                author: user.id,
+                blogImage: uploadPath
             });
 
             await newBlog.save();
@@ -38,51 +51,5 @@ const createBlog = async (req, res) => {
         return res.status(500).json({ message: 'An error occurred during the process' });
     }
 };
-
-// const createBlog = async (req, res) => {
-//     const user = req.User
-//     console.log(user)
-//     const { title, summary, content } = req.body
-//     const authorId = req.user._id
-
-//     console.log(authorId)
-
-//     if (!authorId) {
-//         return res.status(401).json({ message: "Unauthorized" })
-//     }
-
-//     try {
-
-//         const user = req.User
-//         console.log(user)
-//         const { title, summary, content } = req.body
-//         const authorId = req.user._id
-
-//         console.log(authorId)
-
-//         if (!authorId) {
-//             return res.status(401).json({ message: "Unauthorized" })
-//         }
-
-
-
-//         if (!title || !summary || !content) {
-//             throw new Error("The field(s) ommitted are required")
-//         }
-
-//         const newBlog = new blog({
-//             title,
-//             summary,
-//             content,
-//             author: authorId
-//         })
-//         newBlog.save()
-//         return res.status(201).json({ message: "blog uploaded successfully" })
-//     } catch (error) {
-//         console.log(error)
-//         return res.status(500).json({ message: 'an Error occured during the process' })
-//     }
-
-// }
 
 module.exports = createBlog
