@@ -6,7 +6,18 @@ const userSchema = new mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    isLoggedin: {
+        type: Boolean,
+        default: false
+    },
+    isBlocked:{
+        type: Boolean,
+        default: false
+    }
 })
 
 const User = mongoose.model("User", userSchema);

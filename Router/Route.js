@@ -19,7 +19,6 @@ router.route("/blog/:id").get(singleBlog)
 router.route("/blog/update/:id").patch(updateblog)
 router.route("/delblog/:id").delete(deleteBlog)
 router.route("/profile").post(createProfile)
-
 router.route("/contact-form").post(contactForm)
 
 module.exports = router
