@@ -8,12 +8,13 @@ const deleteBlog = require("../Controller/Delblog");
 const updateblog = require("../Controller/updateBlog");
 const createProfile = require("../Controller/Profile");
 const contactForm = require("../Controller/contact");
+const BlockedUser = require('../middleware/authenticate')
 
 const router = express.Router();
 
 router.route("/signup").post(signup)
-router.route("/login").post(login)
-router.route("/createblog").post(auth, createBlog)
+router.route("/login").post(BlockedUser, login)
+router.route("/createblog").post(auth, BlockedUser, createBlog)
 router.route("/allblog").get(allblog)
 router.route("/blog/:id").get(singleBlog)
 router.route("/blog/update/:id").patch(updateblog)
