@@ -7,8 +7,11 @@ const bodyParser = require('body-parser')
 const router = require("./Router/Route")
 const fileUpload = require('express-fileupload');
 
-//body parser here
+
+//fileupload function
 app.use(fileUpload());
+
+//body parser here
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 

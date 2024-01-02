@@ -4,6 +4,10 @@ const blogSchema = new mongoose.Schema({
     title: String,
     summary: String,
     content: String,
+    comments: [{
+        content:String, 
+        date: Date
+    }],
     author: {
         type:mongoose.Schema.Types.ObjectId,
         ref:'User'
@@ -17,5 +21,6 @@ const blogSchema = new mongoose.Schema({
         require: true
     }
 })
+
 const blog = mongoose.model("Blog", blogSchema)
 module.exports = blog
